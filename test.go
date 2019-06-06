@@ -1,29 +1,41 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/FgoDt/tsmux/decoder"
 )
 
 type testio string
 
+var f *os.File
+
 func main() {
+	var e error
+	f, e = os.OpenFile("bipbop.ts", os.O_RDONLY, 0666)
+	if e != nil {
+		fmt.Print(e.Error())
+	}
+
 	d := &decoder.Decoder{}
 	d.TSIO = new(testio)
-	decoder.Decode(d)
+	d.Init()
+	d.Run()
 	fmt.Println("run test")
+
 }
 
-func (i *testio) Read(data []byte, num int) error {
-	data[0] = 0x47
-	data[1] = 0x46
-	data[2] = 0
-	data[3] = 0x17
+func (i *testio) Read(data []byte, num uint64) error {
+	len, e := f.Read(data)
+	if uint64(len) < num || e != nil {
+		return errors.New("no more data")
+	}
 	return nil
 }
 
-func (i testio) Write(data []byte, num int) error {
+func (i testio) Write(data []byte, num uint64) error {
 
 	return nil
 }
