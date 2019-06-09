@@ -54,6 +54,8 @@ type SDTHeader struct {
 	SectionLength          uint16
 	TransportStreamId      uint16
 	VersionNumber          uint8
+	SectionNumber uint8
+	LastSectionNumber	uint8
 	CurrentNextIndicator   uint8
 	OriginalNetwordId      uint8
 	programs               []SDTProgram
@@ -65,4 +67,13 @@ type TSMUXBuf struct {
 	MaxSize uint64
 	buf     []uint8
 	io      TSMUXIO
+}
+
+type PAT struct {
+	TableID uint8
+	SectionLen uint16
+	TransportStreamID uint16
+	Version uint8
+	SectionNumber uint8
+	LastSectionNumber uint8
 }

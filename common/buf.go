@@ -43,10 +43,17 @@ func (b *TSMUXBuf) Write(data []uint8, len uint64) error {
 	return nil
 }
 
-func (b *TSMUXBuf) Seek(pos uint64) bool {
-	if pos > b.Len || pos < 0 {
+func (b *TSMUXBuf)SeekFront(pos uint64)bool{
+	if pos > b.Pos{
 		return false
 	}
-	b.Pos = pos
+	b.Pos = b.Pos - pos
+	return true
+}
+func (b *TSMUXBuf)SeekBack(pos uint64)bool{
+	if pos > b.Len-b.Pos{
+		return false
+	}
+	b.Pos += pos
 	return true
 }
